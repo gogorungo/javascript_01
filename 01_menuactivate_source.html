@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">  
+
+  <style>
+  
+    ul,li{
+      margin:0px; padding:0px; list-style:none;
+    }
+
+    ul#menu_list{
+      width:200px; position:absolute; left:500px; top:200px; 
+    }
+
+    ul#menu_list li{ 
+      width:200px; height:40px; margin-bottom:20px; line-height:40px; background:#eeeeee;  text-align:center;
+      -webkit-transition:0.2s ease; 
+      cursor:pointer;
+    }
+
+    ul#menu_list li.selected{
+      background:orange; color:white; 
+    }    
+  
+  </style>
+    
+
+  <title> menuActivate </title>
+
+  <script>    
+   
+    // 최신 기능
+    // 상단 CSS 스타일의 메뉴요소에 'selected' 클래스로 적용한 메뉴 활성화 스타일 속성 과 transition 속성확인 
+    // DOM 에 문서를 전부 읽으면 로딩을 시작한다, 무조건 한번 읽어야한다
+    // body 에서 실행시 DOMContentLoaded 를 안써도 이미 읽은 이후이므로 그냥 쓸 수 있다
+    // 대신 아래에서 시작시 위치 변경에 따라 적용이 어려우므로 맨 위에 쓰는것이 제일 좋다
+    document.addEventListener("DOMContentLoaded",()=>{
+      
+      //const = final 같은것
+      // 어떤 요소를 찾아낼 때 css 명령구문으로 찾아냄
+      const mainMenu = document.querySelectorAll('#menu_list>li')
+      let selectedMenu = null;
+
+      // mainMenu 의 요소 하나하나를 item 에 넣는다
+      for(const item of mainMenu){
+        item.addEventListener('click',clickMainMenu)
+      }
+
+      // function menuActivate(){
+
+      //   // selected 를 전부 비운 후
+      //   for(const item of mainMenu){
+      //     item.classList.remove('selected')
+      //   }
+
+      //   // 해당 요소에 클래스 추가
+      //   this.classList.add('selected')
+      // }
+
+      // function menuActivate(){
+
+      //   if(selectedMenu != null && selectedMenu != this){
+      //     selectedMenu.classList.remove('selected')
+      //   }
+        
+      //   if(selectedMenu != this){
+      //   // 활성화 된 것 만 타겟으로 지우기 위해 this 지정
+      //     selectedMenu = this;
+      //     selectedMenu.classList.add('selected')
+      //  }
+      // }
+
+      // 내 위치를 보고 순번을 찾는다
+      function clickMainMenu(){
+        let clickIndex = getIndex(this)
+        menuActivate(clickIndex)
+      }
+
+      function getIndex(menu){
+        let checkMenu = menu;
+        let selectedIndex = 0;
+
+        // priviousElementSibling 해당 요소의 이전 요소
+        // 있다면
+        while((checkMenu=checkMenu.previousElementSibling)!= null){
+          selectedIndex++
+        }
+
+        return selectedIndex;
+      }
+
+      function menuActivate(index){
+        if(selectedMenu != null && selectedMenu != mainMenu[index]){
+          selectedMenu.classList.remove('selected')
+        }
+
+        if(selectedMenu != mainMenu[index]){
+          selectedMenu = mainMenu[index]
+          selectedMenu.classList.add('selected')
+        }
+      }
+
+    })
+
+    
+
+
+
+
+
+
+
+
+
+    
+  </script>
+
+
+</head>
+<body>
+
+    <ul id="menu_list">
+      <li>첫번째메뉴</li>
+      <li>두번째메뉴</li>
+      <li>세번째메뉴</li>
+      <li>네번째메뉴</li>
+    </ul>
+  
+</body>
+</html>
