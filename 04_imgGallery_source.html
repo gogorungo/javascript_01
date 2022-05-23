@@ -60,8 +60,12 @@
 
     imgMenuActivate(0)
 
-    for(const item of imgMenu){
+    initEvent()
+
+    function initEvent(){
+      for(const item of imgMenu){
       item.addEventListener('click',clickImgMenu)
+      }
     }
 
     function clickImgMenu(){
@@ -107,7 +111,7 @@
       }})
     }
   })
-  
+
   </script>
 </head>
 <body>
