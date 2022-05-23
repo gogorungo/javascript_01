@@ -21,12 +21,12 @@
     
     div#grayLayer{          
       height:100%; width:100%; position:absolute; left:0; top:0;      
-      background:black; opacity:0;
+      background:black; opacity:0; display: none;
     }   
 
     div#overLayer{      
       width:650px; height:443px; position:absolute; top:50%; left:50%;  margin-top:-221px; margin-left:-325px; 
-      display:none; 
+      display: none;
     }
     
   
@@ -38,17 +38,68 @@
   <!--GSAP CDN 코드 -->
   <script>
 
-    
+    document.addEventListener('DOMContentLoaded',()=>{
 
+      const grayLayer=document.createElement('div')
+      const overLayer=document.createElement('div')
+      const body=document.querySelector('body')
 
+      grayLayer.id='grayLayer'
+      overLayer.id='overLayer'
 
+      const imgMenu=document.querySelectorAll('#img_list>li')
 
+      for(const item of imgMenu){
+        item.addEventListener('click',clickImgMenu)
+      }
 
+      grayLayer.addEventListener('click', hideModalWindow)
 
+      function clickImgMenu(){
+        let clickIndex=getIndex(this)
+        //alert(clickIndex)
+        showModalWindow(clickIndex)
+      }
 
+      function getIndex(checkMenu){
+        let selectedIndex=0;
+        while((checkMenu=checkMenu.previousElementSibling)!=null){
+          selectedIndex++;
+        }
+        return selectedIndex;
+      }
 
-    
-  
+      function showModalWindow(index){
+
+        // body의 맨 뒤에 grayLayer를 하나씩 추가하는 명령어
+        body.append(grayLayer);
+
+        // 스타일 변경
+        // 대상, 보여줘라
+        gsap.set(grayLayer, {display:'block'})
+
+        // 애니메이션 해주는 명령어. 라이브러리 메서드
+        // 대상, opacity: 음영도(0이 흰색, 1이 검은색), duration: 지속시간 (기본단위가 1초), ease: 가속효과(움직임 함수)
+        // onComplete 명령어가 끝난 후 할 명령어 onComplete:() =>{}
+        gsap.to(grayLayer, {opacity:0.9, duration:0.3, ease:'power1.out'})
+
+        // body의 맨 뒤에 overLayer 추가
+        body.append(overLayer)
+        gsap.set(overLayer,{display:'block'})
+
+        // overLayer 안에 HTML 구문을 넣는다
+        overLayer.innerHTML="<img src='./images/photo"+(index+1)+".jpg'>"
+      }
+
+      function hideModalWindow(){
+        gsap.set(overLayer, {display:'none'})
+        // opacity 가 0이라 보이지 않을 뿐이지 여전히 grayLayer 가 존재한다
+        // onComplete 로 닫아준다
+        gsap.to(grayLayer, {opacity:0, duration:0.3, ease:'power1.out', onComplete:()=>{
+          gsap.set(grayLayer,{display:'none'})
+        }})
+      }
+    })
   </script>
 
 

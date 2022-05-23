@@ -52,18 +52,62 @@
 
   <script>
   
-    
+  document.addEventListener('DOMContentLoaded',()=>{
+    const imgMenu=document.querySelectorAll('#img_list>li')
+    const main=document.querySelector('#main')
 
+    let selectedMenu = null
 
+    imgMenuActivate(0)
 
+    for(const item of imgMenu){
+      item.addEventListener('click',clickImgMenu)
+    }
 
+    function clickImgMenu(){
+      let clickIndex = getIndex(this)
+      //alert(clickIndex)
+      imgMenuActivate(clickIndex)
+      showMainImg(clickIndex)
+    }
 
+    function getIndex(checkMenu){
+        let selectedIndex=0;
+        while((checkMenu=checkMenu.previousElementSibling)!=null){
+          selectedIndex++;
+        }
+        return selectedIndex;
+      }
 
+    function imgMenuActivate(index){
+      //비활성화
+      if(selectedMenu!=null && selectedMenu!=imgMenu[index]){
+        // 기존의 selectedMenu 삭제
+        selectedMenu.classList.remove('selected')
+      }
+      // 활성화
+      if(selectedMenu!=imgMenu[index]){
+        // 퍼포먼스를 줄이기위해 해당 인덱스만 비활성화하려면 저장해야됨
+        selectedMenu=imgMenu[index]
+        // 활성화 시킨다
+        selectedMenu.classList.add('selected')
+      }
+    }
 
+    function showMainImg(index){
+      let newImg=document.createElement('img')
+      newImg.src="./images/photo"+(index+1)+".jpg"
+      // main 의 앞에 newImg 를 넣는다
+      main.prepend(newImg)
 
-
-
-    
+      // main 에 id가 없으므로 자식객체를 찾는다(1이니까 두번째 자식. 0은 새로만든 자식.prepend이므로)
+      gsap.to(main.children[1],{opacity:0,duration:0.3,ease:'power1.out', onComplete:()=>{
+        // 생성할 필요가 없으므로 지운다
+        main.removeChild(main.children[1])
+      }})
+    }
+  })
+  
   </script>
 </head>
 <body>
@@ -85,7 +129,7 @@
             </div>           
         </div>
 
-        <div id="main">                
+        <div id="main">               
           <img src="images/photo1.jpg" alt="" />
         </div>
 
