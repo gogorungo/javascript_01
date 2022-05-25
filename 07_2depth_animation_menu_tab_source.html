@@ -49,6 +49,8 @@
 
     div.submenu{
       width:300px; position:absolute; left:0px; top:65px; 
+      /* 숨김 상태에서 시작 */
+      opacity: 0; display: none;
     }
 
     ul.submenu_list>li{
@@ -65,18 +67,65 @@
 
   <script>
 
-    
+    document.addEventListener('DOMContentLoaded',()=>{
+      const mainMenu = document.querySelectorAll('.mainmenu>a')
+      const subMenu=document.querySelectorAll('.submenu')
+      const headerInner=document.querySelector('#header_inner')
 
+      let selectedMenu = null;
 
+      for(const item of mainMenu){
+        item.addEventListener('mouseenter',mainMenuOver)
+        item.addEventListener('focus',mainMenuOver)
+      }
 
+      // 마우스가 떠나면 모든 메뉴가 비활성화 하는 function
+      headerInner.addEventListener('mouseleave',mainMenuOut)
 
+      function mainMenuOver(){
+        menuInActivate(this)
+        menuActivate(this)
+      }
 
+      function menuInActivate(menu){
+        //if(selectedMenu!=null && selectedMenu !=this){
+        if(selectedMenu!=null && selectedMenu !=menu){
+          gsap.to(selectedMenu, {top:0,duration:0.3,ease:'power1.out'})
+          let oldSubMenu=selectedMenu.parentElement.nextElementSibling;
 
+          // 서브메뉴가 사라져도 여전히 남아있으므로 set 으로 닫아줘야한다
+          gsap.to(oldSubMenu,{left:0, opacity:0, duration:0.3, ease:'power1.out', onComplete:()=>{
+            gsap.set(oldSubMenu,{display:'none'})
+          }})
+        }
+      }
 
+      function menuActivate(menu){
+        //if(selectedMenu!=this){
+        if(selectedMenu!=menu){
+          // 마우스 올린 애를 this로 지정
+          //selectedMenu=this
+          selectedMenu=menu
+          gsap.to(selectedMenu, {top:-25,duration:0.3,ease:'power1.out'})
 
+          let newSubMenu=selectedMenu.parentElement.nextElementSibling;
 
+          // set 은 세팅만
+          gsap.set(newSubMenu,{display:'block'})
 
+          // to 는 애니메이션 실행, 왼쪽으로 -30이동, opaticy 선명해짐
+          gsap.to(newSubMenu,{left:-30, opacity:1, duration:0.3, ease:'power1.out'})
+        }
+      }
 
+      function mainMenuOut(){
+        menuInActivate(this)
+
+        // selectedMenu를 초기화해줘야 동일한 조건에서 다시 작동한다
+        selectedMenu=null;
+      }
+
+    })
     
   </script>
 

@@ -73,82 +73,61 @@
   <script> 
 
     document.addEventListener('DOMContentLoaded',()=>{
+        const mainMenu = document.querySelectorAll('#mainmenu_list>li>a')
 
-      // 접근성 때문에 a태그로 잡는다
-      const mainMenu=document.querySelectorAll('#mainmenu_list>li>a')
+        let closeHeight = 45
+        let openHeight = 45
 
-      // 닫혔을 때 높이(안바뀜)
-      let closeHeight=45
+        let selectedMenu = null
 
-      // 열렸을 때 높이
-      let openHeight=45
-
-      let selectedMenu=null;
-
-      for(const item of mainMenu){
-        item.addEventListener('click',mainMenuActivate)
-        //접근성
-        item.addEventListener('focus',mainMenuActivate)
-      }
-
-      
-      function mainMenuActivate(){
-        // 순번은 필요없다. 본인이 선택한 메뉴가 아닐때
-        if(selectedMenu!=null && selectedMenu!=this){
-          //선택되었던 태그의 직계부모태그(a태그의 직계는 li)
-          // 닫아라
-          gsap.to(selectedMenu.parentElement,{height:closeHeight, duration:0.3, ease:'power1.out'})
-          // a태그에 스타일 지정. 클릭시 selected 클래스의 기존 색 비활성화
-          selectedMenu.classList.remove('selected')
-          
-          // span 은 a 태그의 자식은 하나뿐이므로 0(화살표 돌리기)
-          selectedMenu.children[0].classList.remove('selected')
-        }
-
-        if(selectedMenu != this){
-          //열기 전에 클릭위치 저장
-          selectedMenu = this
-
-          // 닫힌 높이는 그대로 두고 추가로 열린 높이를 더한다
-          // ul은 a 태그의 자식이나 부모가 아닌 다음 속성이다. 그 ul 의 자식이 submenu다 + 그 갯수
-          openHeight=closeHeight+(closeHeight*selectedMenu.nextElementSibling.children.length)
-          
-          // 계산식 확인용
-          //alert(openHeight)
-
-          // 열어라
-          gsap.to(selectedMenu.parentElement,{height:openHeight, duration:0.3, ease:'power1.out'})
-
-          // selected 라는 클래스를 selectedMenu에 추가
-          selectedMenu.classList.add('selected')
-
-          selectedMenu.children[0].classList.add('selected')
+        for(const item of mainMenu){
+            item.addEventListener('click',mainMenuActivate)
+            
+            item.addEventListener('focus',mainMenuActivate)
 
         }
 
+        function mainMenuActivate(){
+            if(selectedMenu!=null && selectedMenu != this){
+                gsap.to(selectedMenu.parentElement,{height:closeHeight,duration:0.3,ease:'power1.out'})
 
-      }
+                selectedMenu.classList.remove('selected')
+
+                selectedMenu.children[0].classList.remove('selected')
+            }
+
+            
+
+            if(selectedMenu!=this){
+                selectedMenu=this
+                openHeight = closeHeight + (closeHeight*selectedMenu.nextElementSibling.children.length)
+                gsap.to(selectedMenu.parentElement,{height:openHeight,duration:0.3,ease:'power1.out'})
+
+                selectedMenu.classList.add('selected')
+
+                selectedMenu.children[0].classList.add('selected')
+            }
+        }
+
+
+
+
+
+
+
 
 
 
     })
 
 
-  
-    
 
 
 
 
 
 
-
-
-
-
-   
-    
-  </script>
+</script>
 
 
 </head>

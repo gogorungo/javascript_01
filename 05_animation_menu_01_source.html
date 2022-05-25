@@ -50,7 +50,40 @@
 
   <script>
   
-	
+	document.addEventListener('DOMContentLoaded',()=>{
+		// 접근성때문에 a태그로 접근. (탭키로 누를때 접근)
+		const mainMenu = document.querySelectorAll('#menu_list>li>a')
+
+		for(const item of mainMenu){
+			// 마우스가 들어왔을때 이벤트, 실행할 function
+			item.addEventListener('mouseenter',mainMenuAcivate)
+
+			// focus 키보드가 접근이 되었을 때
+			item.addEventListener('focus',mainMenuAcivate)
+
+			// 마우스가 범위에서 벗어났을 때
+			item.addEventListener('mouseleave',mainMenuInactivate)
+
+			// focus 키보드가 접근이 빠졌을 때
+			item.addEventListener('focusout',mainMenuInactivate)
+		}
+
+		function mainMenuAcivate(){
+			// 애니메이션 을 해당 태그(this)에서 실행
+			// top이 -30 이라서 위로 30 올라감
+			gsap.to(this,{top:-30,duration:0.3,ease:'power1.out'})
+		}
+
+		function mainMenuInactivate(){
+			// 마우스가 태그에서 벗어나면 top을 다시 0으로
+			gsap.to(this,{top:0,duration:0.3,ease:'power1.out'})
+		}
+
+
+
+
+
+	})
 	
 
 
